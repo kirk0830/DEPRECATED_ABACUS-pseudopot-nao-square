@@ -1,0 +1,68 @@
+{
+    "work_folder": ".",
+    "basis_type": "pw",
+    "test_mode": "pseudopotential",
+    "software": "Quantum ESPRESSO",
+    "systems": {
+        "InP": {
+            "experimental_values": {
+                "band_gap": 1.35,
+                "stress": -0.0001
+            }
+        },
+        "InN": {
+            "experimental_values": {
+                "band_gap": 0.7,
+                "stress": -0.0001
+            }
+        },
+        "InO": {
+            "experimental_values": {
+                "band_gap": 3.3,
+                "stress": -0.0001
+            }
+        }
+    },
+    "pseudopotentials": {
+        "pseudopot_paths": {
+            "work": "./pseudopotentials",
+            "resources": "./pseudopotentials/resources"
+        },
+        "kinds": {
+            "In": ["sg15", "pd", "hgh"],
+            "N": ["hgh"],
+            "O": ["sg15", "pd", "hgh"]
+        },
+        "versions": {
+            "In": ["03", "04", "10", "11", "12"],
+            "N": ["1", "2"],
+            "O": ["10", "11", "12"]
+        },
+        "appendices": {
+            "In": ["", "fr", "d", "spd"],
+            "N": [""],
+            "O": [""]
+        }
+    },
+    "numerical_orbitals": {
+        "nao_paths": {
+            "work": "./numerical_orbitals",
+            "resources": "./numerical_orbitals/resources"
+        },
+        "types": {
+            "In": ["DZP", "TZDP"],
+            "N": ["DZP"],
+            "O": ["DZP", "TZDP"]
+        },
+        "rcuts": {
+            "In": [6, 7, 8, 9, 10],
+            "N": [6],
+            "O": [6]
+        },
+        "appendices": {
+            "In": ["", "osci_rm"],
+            "N": [""],
+            "O": [""]
+        }
+    }
+}

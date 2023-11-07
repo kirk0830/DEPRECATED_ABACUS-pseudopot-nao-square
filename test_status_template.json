@@ -1,0 +1,60 @@
+{
+    "systems": {
+        "InN": {
+            "sg1510sg1510_D6D6": {
+                "elements": [
+                    "In",
+                    "N"
+                ],
+                "pseudopotentials": {
+                    "files": {
+                        "In": "In_ONCV_PBE-1.0.upf",
+                        "N": "N_ONCV_PBE-1.0.upf"
+                    },
+                    "info": {
+                        "In": {
+                            "kind": "sg15",
+                            "version": "10",
+                            "appendix": ""
+                        },
+                        "N": {
+                            "kind": "sg15",
+                            "version": "10",
+                            "appendix": ""
+                        }
+                    }
+                },
+                "numerical_orbitals": {
+                    "files": {
+                        "In": "In_gga_6au_100Ry_2s2p2d1f.orb",
+                        "N": "N_gga_6au_100Ry_2s2p1d.orb"
+                    },
+                    "info": {
+                        "In": {
+                            "type": "DZP",
+                            "rcut": "6",
+                            "appendix": ""
+                        },
+                        "N": {
+                            "type": "DZP",
+                            "rcut": "6",
+                            "appendix": ""
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "paths": {
+        "root": ".",
+        "work_folder": ".",
+        "pseudopotential": {
+            "work": ".",
+            "resources": "."
+        },
+        "numerical_orbital": {
+            "work": ".",
+            "resources": "."
+        }
+    }
+}

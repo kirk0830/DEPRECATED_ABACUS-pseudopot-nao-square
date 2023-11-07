@@ -1,0 +1,62 @@
+{
+    "work_folder": ".",
+    "basis_type": "lcao",
+    "test_mode": "pseudopotential",
+    "software": "ABACUS",
+    "systems": {
+        "InAs": {
+            "experimental_values": {
+                "band_gap": 1.35,
+                "stress": -0.0001
+            }
+        },
+        "InSb": {
+            "experimental_values": {
+                "band_gap": 0.7,
+                "stress": -0.0001
+            }
+        }
+    },
+    "pseudopotentials": {
+        "pseudopot_paths": {
+            "work": "./pseudopotentials",
+            "resources": "./pseudopotentials/resources"
+        },
+        "kinds": {
+            "In": ["sg15", "pd"],
+            "As": ["sg15", "pd"],
+            "Sb": ["sg15", "pd"]
+        },
+        "versions": {
+            "In": ["10", "04"],
+            "As": ["10", "04"],
+            "Sb": ["10", "04"]
+        },
+        "appendices": {
+            "In": [""],
+            "As": [""],
+            "Sb": [""]
+        }
+    },
+    "numerical_orbitals": {
+        "nao_paths": {
+            "work": "./numerical_orbitals",
+            "resources": "./numerical_orbitals/resources"
+        },
+        "types": {
+            "In": ["DZP", "TZDP"],
+            "As": ["DZP"],
+            "Sb": ["DZP", "TZDP"]
+        },
+        "rcuts": {
+            "In": [7, 8, 9, 10],
+            "As": [10],
+            "Sb": [10]
+        },
+        "appendices": {
+            "In": ["", "osci_rm"],
+            "As": [""],
+            "Sb": [""]
+        }
+    }
+}

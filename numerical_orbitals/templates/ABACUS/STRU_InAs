@@ -1,0 +1,29 @@
+ATOMIC_SPECIES
+In 114.818 In_pseudopot
+As 74.922 As_pseudopot
+
+NUMERICAL_ORBITAL
+In_numerical_orbital
+As_numerical_orbital
+
+LATTICE_CONSTANT
+1.889716
+
+LATTICE_VECTORS
+    0.00000     3.05356     3.05356
+    3.05356     0.00000     3.05356
+    3.05356     3.05356     0.00000
+
+ATOMIC_POSITIONS
+Direct
+
+In
+0.0
+1
+  0.7500000   0.7500000   0.7500000 1 1 1
+
+As
+0.0
+1
+  0.0000000   0.0000000   0.0000000 1 1 1
+

@@ -1,0 +1,8 @@
+__pycache__
+*.log
+*.out
+*.pyc
+*.dat
+*.c4
+*.txt
+*.png

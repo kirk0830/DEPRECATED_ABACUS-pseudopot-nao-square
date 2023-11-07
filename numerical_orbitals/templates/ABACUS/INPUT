@@ -1,0 +1,15 @@
+INPUT_PARAMETERS
+calculation	scf
+symmetry	1
+ecutwfc	100
+scf_thr	1e-07
+scf_nmax	100
+basis_type	lcao
+smearing_method	gauss
+smearing_sigma	0.002
+cal_stress	1
+cal_force	1
+dft_functional	functional_to_test
+lcao_ecut	2000
+
+out_bandgap     1

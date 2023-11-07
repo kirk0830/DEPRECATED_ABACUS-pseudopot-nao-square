@@ -1,0 +1,37 @@
+#--------------------------------------------------------------------------------
+#1. CMD & ENV
+EXE_mpi    mpirun -np 16
+EXE_pw     /usr/local/bin/abacus
+EXE_opt    /root/ABACUS-orbitals/SIAB/opt_orb_pytorch_dpsi/main.py
+#-------------------------------------------------------------------------------- 
+#2. Electronic calculatation
+ element     In          # Element Name
+ Ecut        100         # in Ry
+ Rcut        6 7 8 9 10  # in Bohr
+ Pseudo_dir  /root/pseudopotentials/NCPP-PD04-PBE
+ Pseudo_name In.PD04.PBE.UPF
+ sigma       0.01        # energy range for gauss smearing (in Ry) 
+
+#--------------------------------------------------------------------------------
+#3. Reference structure related parameters for PW calculation
+#For the built-in structure types (including 'dimer', 'trimer' and 'tetramer'):
+#STRU Name   #STRU Type  #nbands #MaxL   #nspin  #Bond Length list
+ STRU1       dimer       17      3       1      2.2 2.5 3.0 3.8 4.8
+ STRU2       trimer      24      3       1      2.3 2.8 3.4
+
+#-------------------------------------------------------------------------------- 
+#4. SIAB calculatation
+ max_steps    9000
+# Orbital configure and reference target for each level
+#LevelIndex   #Ref STRU Name    #Ref Bands   #InputOrb    #OrbitalConf
+ Level1      STRU1           auto        none        1s1p1d    
+ Level2      STRU1           auto        fix         2s2p2d1f  
+ Level3      STRU2           auto        fix         3s3p3d2f  
+
+#--------------------------------------------------------------------------------
+#5. Save Orbitals
+#Index       #LevelNum    #OrbitalType
+ Save1       Level1       SZ           
+ Save2       Level2       DZP         
+ Save3       Level3       TZDP
+

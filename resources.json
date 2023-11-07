@@ -1,0 +1,41 @@
+{
+    "numerical_orbitals":
+    {
+        "jsons":
+        {
+            
+        },
+        "resources":
+        {
+            "sg15_10": "https://abacus.ustc.edu.cn/_upload/tpl/0c/d8/3288/template3288/download/Libs/SG15-Version1p0__AllOrbitals-Version2p0.zip",
+            "PTG_dpsi": ""
+        }
+    },
+    "pseudopotentials":
+    {
+        "jsons":
+        {
+            "sg15_10": "./pseudopotentials/resources/sg15_10.json"
+        },
+        "resources":
+        {
+            "sg15_10": "https://abacus.ustc.edu.cn/_upload/tpl/0c/d8/3288/template3288/download/Libs/SG15-Version1p0_Pseudopotential.zip",
+            "sg15_11": "http://www.quantum-simulation.org/potentials/sg15_oncv/sg15_oncv_upf_2020-02-06.tar.gz",
+            "sg15_12": "http://www.quantum-simulation.org/potentials/sg15_oncv/sg15_oncv_upf_2020-02-06.tar.gz",
+            "pd_03": "http://www.pwmat.com/pwmat-resource/pseduo-download/NCPP-PD03-PBE.zip",
+            "pd_04": "http://www.pwmat.com/pwmat-resource/pseduo-download/NCPP-PD04-PBE.zip",
+            "dojo_03": "",
+            "dojo_04_fr": "",
+            "dojo_04": "",
+            "dojo_05": "",
+            "kjpaw_031": "",
+            "rrkjus_031": "",
+            "kjpaw_100": "",
+            "rrkjus_100": "",
+            "pslnc_031": "",
+            "hgh_1": "",
+            "hgh_2": "",
+            "gbrv_15": ""
+        }
+    }
+}

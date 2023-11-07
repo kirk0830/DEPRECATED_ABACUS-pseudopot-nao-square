@@ -1,0 +1,42 @@
+{
+    "work_folder": ".",
+    "basis_type": "lcao",
+    "test_mode": "pseudopotential",
+    "software": "ABACUS",
+    "systems": {
+        "InAs": {
+            "experimental_values": {
+                "band_gap": 1.35,
+                "stress": -0.0001
+            }
+        },
+        "InSb": {
+            "experimental_values": {
+                "band_gap": 0.7,
+                "stress": -0.0001
+            }
+        }
+    },
+    "analysis": {
+        "band_gap": {
+            "statistics": {
+                "draw": false,
+                "draw_2d": true,
+                "2d": {
+                    "mode": "imshow",
+                    "cmap": "jet",
+                    "ncol": 2
+                }
+            }
+        },
+        "dos": {
+            "draw": false,
+            "window_width": 4,
+            "delta_e": 0.01,
+            "smear": 0.02
+        },
+        "stress": {
+
+        }
+    }
+}
