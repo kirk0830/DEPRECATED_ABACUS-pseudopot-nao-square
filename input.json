@@ -1,0 +1,94 @@
+{
+    "work_folder": ".",
+    "global": {
+        "test_mode": "pseudopotential",
+        "analysis_items": ["band_gap", "stress"],
+        "software": "ABACUS"
+    },
+    "calculation": {
+        "basis_type": "lcao",
+        "functionals": ["hse"],
+        "ecutwfc": [100],
+        "stress_deformation_ratios": [0.01]
+    },
+    "systems": {
+        "InN": {
+            "experimental_values": {
+                "band_gap": 0.74,
+                "stress": -0.0001
+            }
+        },
+        "InP": {
+            "experimental_values": {
+                "band_gap": 1.34,
+                "stress": -0.0001
+            }
+        },
+        "InAs": {
+            "experimental_values": {
+                "band_gap": 0.41,
+                "stress": -0.0001
+            }
+        },
+        "InSb": {
+            "experimental_values": {
+                "band_gap": 0.23,
+                "stress": -0.0001
+            }
+        }
+    },
+    "pseudopotentials": {
+        "pseudopot_paths": {
+            "work": "./pseudopotentials",
+            "resources": "./pseudopotentials/resources"
+        },
+        "kinds": {
+            "In": ["pslnc"],
+            "N": ["sg15"],
+            "P": ["sg15"],
+            "As": ["sg15"],
+            "Sb": ["sg15"]
+        },
+        "versions": {
+            "In": ["031"],
+            "N": ["10"],
+            "P": ["10"],
+            "As": ["10"],
+            "Sb": ["10"]
+        },
+        "appendices": {
+            "In": [""],
+            "N": [""],
+            "P": [""],
+            "As": [""],
+            "Sb": [""]
+        }
+    },
+    "numerical_orbitals": {
+        "nao_paths": {
+            "work": "./numerical_orbitals",
+            "resources": "./numerical_orbitals/resources"
+        },
+        "types": {
+            "In": ["DZP", "TZDP"],
+            "N": ["DZP", "TZDP"],
+            "P": ["DZP", "TZDP"],
+            "As": ["DZP", "TZDP"],
+            "Sb": ["DZP", "TZDP"]
+        },
+        "rcuts": {
+            "In": [7],
+            "N": [7],
+            "P": [7],
+            "As": [7],
+            "Sb": [7]
+        },
+        "appendices": {
+            "In": [""],
+            "N": [""],
+            "P": [""],
+            "As": [""],
+            "Sb": [""]
+        }
+    }
+}

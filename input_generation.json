@@ -3,6 +3,7 @@
     "basis_type": "lcao",
     "test_mode": "pseudopotential",
     "software": "ABACUS",
+    "functionals": ["PBE", "HSE06"],
     "systems": {
         "InAs": {
             "experimental_values": {
