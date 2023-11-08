@@ -1,19 +1,31 @@
 {
     "work_folder": ".",
-    "basis_type": "lcao",
+    "basis_type": "pw",
     "test_mode": "pseudopotential",
-    "software": "ABACUS",
-    "functionals": ["PBE", "HSE06"],
+    "software": "Quantum ESPRESSO",
+    "functionals": ["pbe"],
     "systems": {
+        "InN": {
+            "experimental_values": {
+                "band_gap": 0.74,
+                "stress": -0.0001
+            }
+        },
+        "InP": {
+            "experimental_values": {
+                "band_gap": 1.34,
+                "stress": -0.0001
+            }
+        },
         "InAs": {
             "experimental_values": {
-                "band_gap": 1.35,
+                "band_gap": 0.41,
                 "stress": -0.0001
             }
         },
         "InSb": {
             "experimental_values": {
-                "band_gap": 0.7,
+                "band_gap": 0.23,
                 "stress": -0.0001
             }
         }
@@ -24,17 +36,23 @@
             "resources": "./pseudopotentials/resources"
         },
         "kinds": {
-            "In": ["sg15", "pd"],
-            "As": ["sg15", "pd"],
-            "Sb": ["sg15", "pd"]
+            "In": ["pslnc"],
+            "N": ["sg15"],
+            "P": ["sg15"],
+            "As": ["sg15"],
+            "Sb": ["sg15"]
         },
         "versions": {
-            "In": ["10", "04"],
-            "As": ["10", "04"],
-            "Sb": ["10", "04"]
+            "In": ["031"],
+            "N": ["10"],
+            "P": ["10"],
+            "As": ["10"],
+            "Sb": ["10"]
         },
         "appendices": {
             "In": [""],
+            "N": [""],
+            "P": [""],
             "As": [""],
             "Sb": [""]
         }
@@ -46,16 +64,22 @@
         },
         "types": {
             "In": ["DZP", "TZDP"],
-            "As": ["DZP"],
+            "N": ["DZP", "TZDP"],
+            "P": ["DZP", "TZDP"],
+            "As": ["DZP", "TZDP"],
             "Sb": ["DZP", "TZDP"]
         },
         "rcuts": {
-            "In": [7, 8, 9, 10],
+            "In": [10],
+            "N": [10],
+            "P": [10],
             "As": [10],
             "Sb": [10]
         },
         "appendices": {
-            "In": ["", "osci_rm"],
+            "In": [""],
+            "N": [""],
+            "P": [""],
             "As": [""],
             "Sb": [""]
         }

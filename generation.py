@@ -19,9 +19,12 @@ def generate_test_status(work_status: dict) -> dict:
     """ generate test_status for passing test information """
     test_status = {
         "general": {
-            "basis_type": work_status["basis_type"],
             "test_mode": work_status["test_mode"],
-            "software": work_status["software"]
+            "software": work_status["software"],
+            "basis_type": work_status["basis_type"]
+        },
+        "dft_settings": {
+            "functionals": work_status["functionals"]
         },
         "systems": {},
         "paths": {
@@ -41,6 +44,9 @@ def generate_test_status(work_status: dict) -> dict:
     valid_pseudopotentials = sc.scan_valid_pseudopotentials(work_status)
     if work_status["basis_type"] == "lcao":
         valid_numerical_orbitals = sc.scan_valid_numerical_orbitals(work_status, valid_pseudopotentials)
+        if len(list(valid_numerical_orbitals.keys())) != len(list(valid_pseudopotentials.keys())):
+            print("Error: number of elements in valid_numerical_orbitals is not equal to number of elements in valid_pseudopotentials.")
+            exit(1)
     # loop over systems, for every system, find all possible combinations of pseudopotentials
     # and corresponding numerical orbitals
     # note that it may be different for different systems

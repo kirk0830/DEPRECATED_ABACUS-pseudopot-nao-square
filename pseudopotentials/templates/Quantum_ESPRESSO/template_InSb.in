@@ -12,7 +12,7 @@
                nosym = .false.,
              ecutwfc = 100,
            celldm(1) = 1.889716,
-		input_dft = hse,
+		input_dft = functional_to_test,
 /
 &ELECTRONS
     electron_maxstep = 100,

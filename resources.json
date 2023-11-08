@@ -37,5 +37,12 @@
             "hgh_2": "",
             "gbrv_15": ""
         }
+    },
+    "crystal_database":
+    {
+        "materials_project":
+        {
+            "api_key": "5feX86roqGMRzW0kr9G"
+        }
     }
 }
