@@ -1,5 +1,9 @@
 # ABACUS psesudopotentials and numerical orbitals test workflow
 *Author: kirk0830*
+## To use
+```bash
+python -m main
+```
 ## Environments and dependencies
 ### Executables
 * Quantum ESPRESSO `I1d.x` executable is needed to generate PSlibrary 0.3.1 and 1.0.0 version PAW and US pseudopotential files. The executable is not included in the repository.
@@ -18,11 +22,38 @@
 ### File structure
 ```
 ├── readme.md
-├── resources.json
-├── pseudopot_test_generation.py
-├── nao_test_generation.py
-├── pseudopot_test_analysis.py
-├── pseudopot_test_fold_band.py
+├── analysis/
+│  ├── __init__.py
+│  ├── analysis.py
+│  ├── astr.py
+│  ├── abg.py
+│  ├── fold_band.py
+│  └── ...
+├── base/
+│  ├── __init__.py
+│  ├── atom_in.py
+│  ├── file_io.py
+│  ├── scans.py
+│  └── ...
+├── configure/
+│  ├── __init__.py
+│  ├── configure.py
+│  ├── nao_generation.py
+│  ├── resources.py
+│  ├── ...
+│  └── support/
+│      ├── resources.json
+│      └── ...
+├── examples/
+│  ├── test_status_template.json
+│  ├── work_status_template.json
+│  └── ...
+├── generation/
+│  ├── __init__.py
+│  ├── generation.py
+│  ├── glpt.py
+│  ├── gppt.py
+│  └── ...
 ├── numerical_orbitals/
 │  ├── resources/
 │  │   ├── sg15_10 ([pseudopot_kind]_[pseudopot_version]_[appendix])
@@ -45,7 +76,6 @@
 │  │   ├── INPUT
 │  │   ├── KPT
 │  │   └── STRU_* (for each system to test)
-│  ├── config.json (for ABACUS Test setting)
 │  └── ...
 ├── pseudopotentials/
 │  ├── resources/
@@ -60,16 +90,21 @@
 │  │   ├── t_*
 │  │   └── ...
 │  ├── templates/
-│  │   └── template_*.in (for each system to test)
-│  ├── config.json (for ABACUS Test setting)
+│  │   ├── Quantum_ESPRESSO/
+│  │   │   ├── template_*.in (for each system to test)
+│  │   │   └── ...
+│  │   ├── ABACUS/
+│  │   │   ├── INPUT
+│  │   │   ├── KPT
+│  │   │   └── STRU_* (for each system to test)
 │  └── ...
-├── analysis/
-│  └── [developing]
+├── main.py
+├── __init__.py
 └── ...
 ```
 ## Usage
 ### Configuration
-#### Files auto-download
+#### Files auto-download (under development)
 In `./resources.json`, add/change `resources` section to download files automatically. `jsons` section will be useful when preparing input scripts.
 #### Pseudopotential generation
 For cases such as `kjpaw`, `rrkjus` or `pslnc` those pseudopotential kinds belonging to PSlibrary, pseudopotential may need to generate with Quantum ESPRESSO `Id1.x` code. Therefore this executable must be ready. If so, change the variable `qe_path` in `resources.json` to the path of folder, where there is `Id1.x` executable.
@@ -94,50 +129,180 @@ TBD...
 ### config.json
 TBD...
 ### work_status
-`work_status` is the input variable of `pseudopot_test_generation.py`, `pseudopot_test_analysis.py` and `nao_test_generation.py`. It always has such following keywords:
-```
+`work_status` is the placeholder of input parameters. For test generation and analysis, different input files are used. For test generation, it always has such following keywords:
+```json
 {
-    "work_folder": "path/to/work/folder",
-    "pseudopot_kinds": ["pseudopot_kind_1", "pseudopot_kind_2", ...],
-    "versions": ["version_1", "version_2", ...],
-    "appendices": ["appendix_1", "appendix_2", ...],
-    ...
+    "work_folder": ".",
+    "global": {
+        "test_mode": "pseudopotential",
+        "analysis_items": ["band_gap", "stress"],
+        "software": "ABACUS"
+    },
+    "calculation": {
+        "basis_type": "lcao",
+        "functionals": ["hse"],
+        "ecutwfc": [100],
+        "stress_deformation_ratios": [0.01]
+    },
     "systems": {
-        "system1": {
-            "experimental_value": 1.0,
+        "InAs": {
+            "experimental_values": {
+                "band_gap": 1.35,
+                "stress": -0.0001
+            }
+        },
+        "InSb": {
+            "experimental_values": {
+                "band_gap": 0.7,
+                "stress": -0.0001
+            }
         }
-        "system2": {
-            "experimental_value": 2.0,
+    },
+    "pseudopotentials": {
+        "pseudopot_paths": {
+            "work": "./pseudopotentials",
+            "resources": "./pseudopotentials/resources"
+        },
+        "kinds": {
+            "In": ["sg15", "pd"],
+            "As": ["sg15", "pd"],
+            "Sb": ["sg15", "pd"]
+        },
+        "versions": {
+            "In": ["10", "04"],
+            "As": ["10", "04"],
+            "Sb": ["10", "04"]
+        },
+        "appendices": {
+            "In": [""],
+            "As": [""],
+            "Sb": [""]
         }
-        ...
+    },
+    "numerical_orbitals": {
+        "nao_paths": {
+            "work": "./numerical_orbitals",
+            "resources": "./numerical_orbitals/resources"
+        },
+        "types": {
+            "In": ["DZP", "TZDP"],
+            "As": ["DZP"],
+            "Sb": ["DZP", "TZDP"]
+        },
+        "rcuts": {
+            "In": [7, 8, 9, 10],
+            "As": [10],
+            "Sb": [10]
+        },
+        "appendices": {
+            "In": ["", "osci_rm"],
+            "As": [""],
+            "Sb": [""]
+        }
     }
 }
 ```
 In this json, user should give enough information for the whole test, included but not limited to systems description, sometimes the postprocessing such as plot is also needed.
+For test analysis tasks, the input json always has the following information:
+```json
+{
+    "test_status": "test_status.json",
+    "work_folder": ".",
+    "basis_type": "lcao",
+    "test_mode": "pseudopotential",
+    "software": "ABACUS",
+    "systems": {
+        "InAs": {
+            "experimental_values": {
+                "band_gap": 1.35,
+                "stress": -0.0001
+            }
+        },
+        "InSb": {
+            "experimental_values": {
+                "band_gap": 0.7,
+                "stress": -0.0001
+            }
+        }
+    },
+    "analysis": {
+        "band_gap": {
+            "statistics": {
+                "draw": false,
+                "draw_2d": true,
+                "2d": {
+                    "mode": "imshow",
+                    "cmap": "jet",
+                    "ncol": 2
+                }
+            }
+        },
+        "dos": {
+            "draw": false,
+            "window_width": 4,
+            "delta_e": 0.01,
+            "smear": 0.02
+        },
+        "stress": {
+
+        }
+    }
+}
+```
 ### test_status
 test_status is a on-the-fly or in-build json, which will pass from one function to another inside program. If there is no special case, it will not be a real output. test_status describes with more details not only for systems, but may also carry data.
 The design of test_status is shown in following:
-```
-{
-    "work_folder": "./numerical_orbitals",
-    "InAs": {
-        "sg15_10_7_DZP_pbe": {
-            "elements": [
-                "In",
-                "As"
-            ],
-            "pseudopotentials": [
-                "In_ONCV_PBE-1.0.upf",
-                "As_ONCV_PBE-1.0.upf"
-            ],
-            "numerical_orbitals": [
-                "In_gga_7au_100Ry_2s2p2d1f.orb",
-                "As_gga_7au_100Ry_2s2p1d.orb"
-            ]
-        }
+```json
+    "systems": {
+        "InAs": {
+            "sg1510sg1510_D7D10": {
+                "elements": [
+                    "In",
+                    "As"
+                ],
+                "pseudopotentials": {
+                    "files": {
+                        "In": "In_ONCV_PBE-1.0.upf",
+                        "As": "As_ONCV_PBE-1.0.upf"
+                    },
+                    "info": {
+                        "In": {
+                            "kind": "sg15",
+                            "version": "10",
+                            "appendix": ""
+                        },
+                        "As": {
+                            "kind": "sg15",
+                            "version": "10",
+                            "appendix": ""
+                        }
+                    }
+                },
+                "numerical_orbitals": {
+                    "files": {
+                        "In": "In_gga_7au_100Ry_2s2p2d1f.orb",
+                        "As": "As_gga_10au_100Ry_2s2p1d.orb"
+                    },
+                    "info": {
+                        "In": {
+                            "type": "DZP",
+                            "rcut": 7,
+                            "appendix": ""
+                        },
+                        "As": {
+                            "type": "DZP",
+                            "rcut": 10,
+                            "appendix": ""
+                        }
+                    }
+                }
+            },
+        ...
+    }
+    ...
 }
 ```
-Therefore except `work_folder` and `root`, other keys are all system names. Under each system, there are test names, and under each pseudopotential, there are elements and numerical orbitals.  
+Under each system, there are test names, and under each pseudopotential, there are elements and numerical orbitals.  
 - For pseudopotential tests, the name of test is organized as [pseudopot_kind]_ [pseudopot_version]_ [appendix]_ [functional].  
 - For numerical atomic orbital tests, the name of test is organized as [pseudopot_kind]_ [pseudopot_version]_ [appendix]_ [cutoff radius]_ [zeta information]_ [functional].
 ## Other tools
