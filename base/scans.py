@@ -1,5 +1,5 @@
 import os
-import atom_in as ai
+import base.atom_in as ai
 
 def scan_elements(system: str) -> list:
 

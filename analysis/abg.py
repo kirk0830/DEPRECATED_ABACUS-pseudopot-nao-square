@@ -1,4 +1,4 @@
-import fold_band as fb
+import analysis.fold_band as fb
 import os
 import matplotlib.pyplot as plt
 import numpy as np
@@ -7,14 +7,14 @@ import json
 
 def analysis_band_gap(work_status: dict, test_status: dict) -> None:
 
-    if test_status["general"]["software"] == "Quantum ESPRESSO":
+    if test_status["global"]["software"] == "Quantum ESPRESSO":
         log_status = read_energies_quantum_espresso(work_status, test_status)
         if test_status["draw_statistics"]:
             statistics(work_status, test_status, log_status)
         if test_status["dos"]["draw"]:
             log_status = calculate_dos(log_status, delta_e = test_status["dos"]["delta_e"], smear = test_status["dos"]["smear"])
             draw_dos(log_status)
-    elif test_status["general"]["software"] == "ABACUS":
+    elif test_status["global"]["software"] == "ABACUS":
         pass
     else:
         print("Error: software not recognized.")

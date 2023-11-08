@@ -1,4 +1,5 @@
 {
+    "test_status": "test_status.json",
     "work_folder": ".",
     "basis_type": "lcao",
     "test_mode": "pseudopotential",

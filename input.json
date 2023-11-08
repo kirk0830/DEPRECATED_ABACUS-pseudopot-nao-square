@@ -1,9 +1,16 @@
 {
     "work_folder": ".",
-    "basis_type": "pw",
-    "test_mode": "pseudopotential",
-    "software": "Quantum ESPRESSO",
-    "functionals": ["pbe"],
+    "global": {
+        "test_mode": "pseudopotential",
+        "analysis_items": ["band_gap", "stress"],
+        "software": "ABACUS"
+    },
+    "calculation": {
+        "basis_type": "lcao",
+        "functionals": ["hse"],
+        "ecutwfc": [100],
+        "stress_deformation_ratios": [0.01]
+    },
     "systems": {
         "InN": {
             "experimental_values": {
@@ -70,11 +77,11 @@
             "Sb": ["DZP", "TZDP"]
         },
         "rcuts": {
-            "In": [10],
-            "N": [10],
-            "P": [10],
-            "As": [10],
-            "Sb": [10]
+            "In": [7],
+            "N": [7],
+            "P": [7],
+            "As": [7],
+            "Sb": [7]
         },
         "appendices": {
             "In": [""],

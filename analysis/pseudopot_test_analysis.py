@@ -1,4 +1,4 @@
-import pseudopot_test_fold_band as fb
+import fold_band as fb
 import os
 import matplotlib.pyplot as plt
 import numpy as np

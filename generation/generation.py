@@ -1,8 +1,11 @@
-import scans as sc
-import itertools as it
+import sys
+import sys
 import os
-import gppt
-import glpt
+
+import base.scans as sc
+import itertools as it
+import generation.gppt as gppt
+import generation.glpt as glpt
 
 def convert_to_absolutepath(work_status: dict) -> dict:
 
@@ -18,13 +21,16 @@ def generate_test_status(work_status: dict) -> dict:
     
     """ generate test_status for passing test information """
     test_status = {
-        "general": {
-            "test_mode": work_status["test_mode"],
-            "software": work_status["software"],
-            "basis_type": work_status["basis_type"]
+        "global": {
+            "test_mode": work_status["global"]["test_mode"],
+            "analysis_items": work_status["global"]["analysis_items"],
+            "software": work_status["global"]["software"]
         },
-        "dft_settings": {
-            "functionals": work_status["functionals"]
+        "calculation": {
+            "basis_type": work_status["calculation"]["basis_type"],
+            "functionals": work_status["calculation"]["functionals"],
+            "ecutwfc": work_status["calculation"]["ecutwfc"],
+            "stress_deformation_ratios": work_status["calculation"]["stress_deformation_ratios"]
         },
         "systems": {},
         "paths": {
@@ -42,7 +48,7 @@ def generate_test_status(work_status: dict) -> dict:
     }
     # get valid pseudopotentials
     valid_pseudopotentials = sc.scan_valid_pseudopotentials(work_status)
-    if work_status["basis_type"] == "lcao":
+    if work_status["calculation"]["basis_type"] == "lcao":
         valid_numerical_orbitals = sc.scan_valid_numerical_orbitals(work_status, valid_pseudopotentials)
         if len(list(valid_numerical_orbitals.keys())) != len(list(valid_pseudopotentials.keys())):
             print("Error: number of elements in valid_numerical_orbitals is not equal to number of elements in valid_pseudopotentials.")
@@ -61,7 +67,7 @@ def generate_test_status(work_status: dict) -> dict:
         elements = sc.scan_elements(system)
 
         for element in elements:
-            if work_status["basis_type"] == "pw":
+            if work_status["calculation"]["basis_type"] == "pw":
                 # in this case... because the valid_pseudopotentials has format:
                 # {
                 #     "As": {
@@ -82,7 +88,7 @@ def generate_test_status(work_status: dict) -> dict:
                 # }
                 # so we need to get the keys of the dictionary
                 valid_pseudopots_to_combine.append([[valid_pseudopot] for valid_pseudopot in list(valid_pseudopotentials[element].keys())])
-            elif work_status["basis_type"] == "lcao":
+            elif work_status["calculation"]["basis_type"] == "lcao":
                 # in this case... valid_numerical_orbitals has format:
                 # {
                 #     "As": {
@@ -161,7 +167,7 @@ def generate_test_status(work_status: dict) -> dict:
             # loop over elements
             for ie, element in enumerate(elements): # so we can get the index of element
                 pseudo_element = test[ie][0]
-                if work_status["basis_type"] == "lcao":
+                if work_status["calculation"]["basis_type"] == "lcao":
                     nao_type_element = test[ie][1]
                 # get pseudopotential information and copy to test_status
                 test_status["systems"][system][test_name]["pseudopotentials"]["files"][element] = valid_pseudopotentials[element][pseudo_element]["file"]
@@ -171,7 +177,7 @@ def generate_test_status(work_status: dict) -> dict:
                     "appendix": valid_pseudopotentials[element][pseudo_element]["appendix"]
                 }
                 # get numerical orbital information and copy to test_status
-                if work_status["basis_type"] == "lcao":
+                if work_status["calculation"]["basis_type"] == "lcao":
                     test_status["systems"][system][test_name]["numerical_orbitals"]["files"][element] = valid_numerical_orbitals[element][pseudo_element][nao_type_element]["file"]
                     test_status["systems"][system][test_name]["numerical_orbitals"]["info"][element] = {
                         "type": valid_numerical_orbitals[element][pseudo_element][nao_type_element]["type"],
@@ -183,9 +189,9 @@ def generate_test_status(work_status: dict) -> dict:
 
 def generate_test(test_status: dict) -> None:
 
-    if test_status["general"]["basis_type"] == "pw":
+    if test_status["calculation"]["basis_type"] == "pw":
         gppt.generate_pw_pseudopotential_test(test_status)
-    elif test_status["general"]["basis_type"] == "lcao":
+    elif test_status["calculation"]["basis_type"] == "lcao":
         glpt.generate_lcao_pseudopotential_test(test_status)
     else:
         print("Error: basis_type not recognized.")

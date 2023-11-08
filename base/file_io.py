@@ -1,4 +1,4 @@
-import atom_in as ai
+import base.atom_in as ai
 import numpy as np
 
 def cif_to_STRU(

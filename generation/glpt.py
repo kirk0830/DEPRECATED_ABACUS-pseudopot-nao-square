@@ -1,9 +1,9 @@
 import os
-import atom_in as ai
+import base.atom_in as ai
 
 def generate_lcao_pseudopotential_test(test_status: dict):
 
-    if test_status["general"]["software"] == "ABACUS":
+    if test_status["global"]["software"] == "ABACUS":
         glpt_abacus(test_status)
     else:
         print("Error: software not recognized.")
@@ -12,7 +12,7 @@ def generate_lcao_pseudopotential_test(test_status: dict):
 def glpt_abacus(test_status: dict):
 
     os.chdir(test_status["paths"]["work_folder"])
-    for functional in test_status["dft_settings"]["functionals"]:
+    for functional in test_status["calculation"]["functionals"]:
         for system in test_status["systems"].keys():
             for test in test_status["systems"][system].keys():
                 folder = "t_" + functional + "_" + test + "_" + system
@@ -55,12 +55,15 @@ def glpt_abacus(test_status: dict):
                     os.system("sed -i 's/{}_numerical_orbital/".format(element) + nao_file + "/g' " + folder + "\\STRU")
 
     os.chdir(test_status["paths"]["root"])
-    print_str = """Generation Done.\n
-To run ABACUS tests on ABACUS Test, use the following parameters:\n
-rundft: OMP_NUM_THREADS=16 mpirun -np 1 abacus | tee out.log (especially when dft_functional = HSE, arbitrary if PBE)\n
-Bohrium image: registry.dp.tech/deepmodeling/abacus-intel:latest (this one is default)\n
-Bohrium_machine_type: c32_m128_cpu (c32_m64_cpu has bad performance)\n
+    print_str = """------------------------------------------------------------------------------
+Generation Done.
+To run ABACUS tests on ABACUS Test, use the following parameters:
+rundft: OMP_NUM_THREADS=16 mpirun -np 1 abacus | tee out.log 
+(especially when dft_functional = HSE, arbitrary if PBE)
+Bohrium image: registry.dp.tech/deepmodeling/abacus-intel:latest (this one is default)
+Bohrium_machine_type: c32_m128_cpu (c32_m64_cpu has bad performance)
 Bohrium_platform: ali
+------------------------------------------------------------------------------
 """
     print(print_str)
 
