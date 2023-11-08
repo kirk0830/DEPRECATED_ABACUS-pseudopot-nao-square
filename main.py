@@ -1,9 +1,18 @@
 # import two modules
-import generation.generation as tg
-import analysis.analysis as ta
+import abacus_pseudopotential_square.generation.generation as tg
+import abacus_pseudopotential_square.analysis.analysis as ta
 # for input file parsing
 import json
+# for path operation
+import os
 
+def switch_to_program_folder() -> None:
+    """
+    switch to program folder
+    """
+    os.chdir(".\\abacus_pseudopotential_square\\")
+    print("Switch to program folder: %s"%os.path.abspath(".\\abacus_pseudopotential_square\\"))
+    return None
 """
 Sub-driver for test generation
 
@@ -16,7 +25,7 @@ def prepare_test(file: str):
 
     with open(file, "r") as f:
         work_status = json.load(f)
-
+    #switch_to_program_folder()
     work_status = tg.convert_to_absolutepath(work_status)
     test_status = tg.generate_test_status(work_status)
 
