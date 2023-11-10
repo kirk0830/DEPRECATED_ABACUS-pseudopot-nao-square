@@ -3,7 +3,8 @@
     "global": {
         "test_mode": "pseudopotential",
         "analysis_items": ["band_gap", "stress"],
-        "software": "ABACUS"
+        "software": "ABACUS",
+        "save_test_status": true
     },
     "calculation": {
         "basis_type": "lcao",
