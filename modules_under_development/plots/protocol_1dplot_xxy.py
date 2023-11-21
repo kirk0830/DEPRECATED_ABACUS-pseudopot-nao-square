@@ -242,7 +242,7 @@ if __name__ == "__main__":
         # add black dashed line at y=0
         ax1[i].axhline(y=0, color='k', linestyle='--', alpha = 0.5)
         # add vertical grid lines, semi-transparent
-        ax1[i].grid(axis='x', alpha=0.5)
+        ax1[i].grid(axis='x', alpha=0.5, linestyle='-.')
         # only add legend for the last subplot
         if i == len(pseudopots)-1:
             lines = line_pw + line_dzp + line_tzdp

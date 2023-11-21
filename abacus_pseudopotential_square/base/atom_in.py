@@ -116,3 +116,4 @@ def get_element_mass(label: str) -> float:
         "Nh": 286, "Fl": 289, "Mc": 289, "Lv": 293, "Ts": 294,
         "Og": 294
     }
+    return mass[label]

@@ -1,0 +1,66 @@
+{
+    "work_folder": ".",
+    "global": {
+        "test_mode": "pseudopotential",
+        "analysis_items": ["band_gap", "stress"],
+        "software": "ABACUS",
+        "save_test_status": true
+    },
+    "calculation": {
+        "basis_type": "pw",
+        "functionals": ["pbe"],
+        "ecutwfc": [100],
+        "stress_deformation_ratios": [0.01]
+    },
+    "systems": {
+        "NbOCl": {}
+    },
+    "pseudopotentials": {
+        "pseudopot_paths": {
+            "work": "./pseudopotentials",
+            "resources": "./pseudopotentials/resources"
+        },
+        "kinds": {
+            "Nb": ["hgh"],
+            "O": ["hgh"],
+            "Cl": ["hgh"]
+        },
+        "versions": {
+            "Nb": ["1"],
+            "O": ["1"],
+            "Cl": ["1"]
+        },
+        "appendices": {
+            "Nb": [""],
+            "O": [""],
+            "Cl": [""]
+        }
+    },
+    "numerical_orbitals": {
+        "nao_paths": {
+            "work": "./numerical_orbitals",
+            "resources": "./numerical_orbitals/resources"
+        },
+        "types": {
+            "In": ["DZP", "TZDP"],
+            "N": ["DZP", "TZDP"],
+            "P": ["DZP", "TZDP"],
+            "As": ["DZP", "TZDP"],
+            "Sb": ["DZP", "TZDP"]
+        },
+        "rcuts": {
+            "In": [7],
+            "N": [7],
+            "P": [7],
+            "As": [7],
+            "Sb": [7]
+        },
+        "appendices": {
+            "In": [""],
+            "N": [""],
+            "P": [""],
+            "As": [""],
+            "Sb": [""]
+        }
+    }
+}

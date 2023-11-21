@@ -71,5 +71,5 @@ def main(mode: str, file: str):
 
 if __name__ == "__main__":
 
-    main("generation", "input.json")
+    main("generation", "input_NbOCl.json")
 
