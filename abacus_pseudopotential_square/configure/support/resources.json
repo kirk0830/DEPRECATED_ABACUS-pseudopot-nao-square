@@ -24,18 +24,18 @@
             "sg15_12": "http://www.quantum-simulation.org/potentials/sg15_oncv/sg15_oncv_upf_2020-02-06.tar.gz",
             "pd_03": "http://www.pwmat.com/pwmat-resource/pseduo-download/NCPP-PD03-PBE.zip",
             "pd_04": "http://www.pwmat.com/pwmat-resource/pseduo-download/NCPP-PD04-PBE.zip",
-            "dojo_03": "",
-            "dojo_04_fr": "",
-            "dojo_04": "",
-            "dojo_05": "",
-            "kjpaw_031": "",
-            "rrkjus_031": "",
+            "dojo_03": "http://www.pseudo-dojo.org/pseudos/nc-sr_pbe_standard_upf.tgz",
+            "dojo_04_fr": "http://www.pseudo-dojo.org/pseudos/nc-fr-04_pbe_standard_upf.tgz",
+            "dojo_04": "http://www.pseudo-dojo.org/pseudos/nc-sr-04_pbe_standard_upf.tgz",
+            "dojo_05": "http://www.pseudo-dojo.org/pseudos/nc-sr-05_pbe_standard_upf.tgz",
+            "kjpaw_031": "http://theossrv1.epfl.ch/Main/NoBackup?action=download&upname=pbe.0.3.1.tgz",
+            "rrkjus_031": "http://theossrv1.epfl.ch/Main/NoBackup?action=download&upname=pbe.0.3.1.tgz",
             "kjpaw_100": "",
             "rrkjus_100": "",
-            "pslnc_031": "",
+            "pslnc_031": "http://theossrv1.epfl.ch/Main/NoBackup?action=download&upname=pbe.0.3.1.tgz",
             "hgh_1": "",
             "hgh_2": "",
-            "gbrv_15": ""
+            "gbrv_15": "https://www.physics.rutgers.edu/gbrv/Work_GBRV_v1.5.tar.gz"
         }
     },
     "crystal_database":

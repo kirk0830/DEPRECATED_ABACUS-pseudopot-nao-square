@@ -1,13 +1,25 @@
 from mp_api.client import MPRester
 
-def download_cif_from_materials_project(api_key: str):
-
+def single_element_structures(api_key: str, element: str, num_cif = 1):
+    
     with MPRester(api_key) as mpr:
-        docs = mpr.materials.summary.search(elements=["Si", "O"], 
-                                band_gap=(0.5, 1.0))
-    for doc in docs:
-        print(doc)
+        docs = mpr.materials.summary.search(elements=[element], num_elements=1)
+        
+    mpi_ids = [doc.material_id for doc in docs]
+
+    num_cif_downloaded = 0
+    for mpi_id in mpi_ids:
+        with MPRester(api_key) as mpr:
+            structure = mpr.get_structure_by_material_id(mpi_id)
+        structure.to(filename=f"{mpi_id}.cif", fmt="cif")
+        num_cif_downloaded += 1
+        if num_cif_downloaded == num_cif:
+            break
 
 if __name__ == "__main__":
 
-    download_cif_from_materials_project("wV1HUdmgESPVgSmQj5cc8WvttCO8NTHp")
+    api_key = "wV1HUdmgESPVgSmQj5cc8WvttCO8NTHp"
+    elements = ['Ce', 'Dy', 'Er', 'Eu', 'Gd', 'Ho', 'La', 'Lu', 'Nd', 'Pm', 'Pr', 'Sm', 'Tb', 'Tm', 'Yb']
+    for element in elements:
+        single_element_structures(api_key, element, num_cif = 1)
+    
