@@ -32,8 +32,9 @@ def glpt_abacus(test_status: dict):
                 # copy pseudopotential and numerical orbital to test folder
                 for element in test_status["systems"][system][test]["elements"]:
                     pseudopot_path = test_status["paths"]["pseudopotential"]["resources"] + "\\"
-                    pseudopot_kva = test_status["systems"][system][test]["pseudopotentials"]["info"][element]["kind"] + "_"
-                    pseudopot_kva += test_status["systems"][system][test]["pseudopotentials"]["info"][element]["version"]
+                    pseudopot_kva = test_status["systems"][system][test]["pseudopotentials"]["info"][element]["kind"]
+                    if test_status["systems"][system][test]["pseudopotentials"]["info"][element]["version"] != "":
+                        pseudopot_kva += "_" + test_status["systems"][system][test]["pseudopotentials"]["info"][element]["version"]
                     if test_status["systems"][system][test]["pseudopotentials"]["info"][element]["appendix"] != "":
                         pseudopot_kva += "_" + test_status["systems"][system][test]["pseudopotentials"]["info"][element]["appendix"]
                     pseudopot_path += pseudopot_kva + "\\"

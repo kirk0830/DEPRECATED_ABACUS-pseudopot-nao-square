@@ -17,7 +17,7 @@ def analysis_band_gap(work_status: dict, test_status: dict) -> None:
     elif test_status["global"]["software"] == "ABACUS":
         pass
     else:
-        print("Error: software not recognized.")
+        print("abg>> Error: software not recognized.")
         exit(1)
 
 def read_energies_quantum_espresso(work_status: dict, test_status: dict):
@@ -32,9 +32,9 @@ def read_energies_quantum_espresso(work_status: dict, test_status: dict):
             folder = "t_" + test
             if os.path.isdir(folder):
                 os.chdir(folder)
-                print("Analyzing " + folder + "...")
+                print("abg>> Analyzing " + folder + "...")
                 if os.path.exists("CRASH"):
-                    print("CRASH detected in folder ", folder)
+                    print("abg>> CRASH detected in folder ", folder)
                     # for we use absolute path, we do not need to change directory back
                     continue
                 log_status[system][test] = {
@@ -68,22 +68,22 @@ def read_energies_quantum_espresso(work_status: dict, test_status: dict):
                 log_status[system][test]["pseudopotential"]["appendix"] = concatenated_pseudopot_appendix
                 
                 if os.path.exists("scf.log"):
-                    print("parsing ", folder)
+                    print("abg>> parsing ", folder)
                     band_energies, nelec, nband, efermi = fb.parse_qe_output("scf.log")
                     log_status[system][test]["energies"]["band_energies"] = band_energies
                     log_status[system][test]["nelec"] = nelec
                     log_status[system][test]["nband"] = nband
                     log_status[system][test]["energies"]["efermi"] = efermi
-                    print("nelec = ", nelec, " nband = ", nband, " efermi = ", efermi)
+                    print("abg>> nelec = ", nelec, " nband = ", nband, " efermi = ", efermi)
                     band_gap, band_energies, homo, lumo = fb.calculate_band_gap(band_energies, nelec, efermi, True)
                     log_status[system][test]["energies"]["band_gap"] = band_gap
                     log_status[system][test]["energies"]["band_energies"] = band_energies
                     log_status[system][test]["energies"]["homo"] = homo
                     log_status[system][test]["energies"]["lumo"] = lumo
 
-                    print("band gap calculated to be: ", round(band_gap, 4), " ev")
+                    print("abg>> band gap calculated to be: ", round(band_gap, 4), " ev")
                 os.chdir("..")
-                print("back to folder ", os.getcwd())
+                print("abg>> back to folder ", os.getcwd())
     os.chdir(test_status["paths"]["root"])
     return log_status
 
@@ -94,7 +94,7 @@ def count_test_kinds(log_status: dict) -> int:
 def calculate_dos(log_status: dict, delta_e = 0.01, smear = 0.02) -> dict:
     for system in log_status.keys():
         for test in log_status[system].keys():
-            print("calculating density of states for system {0}, test {1}".format(system, test))
+            print("abg>> calculating density of states for system {0}, test {1}".format(system, test))
             emin = log_status[system][test]["energies"]["efermi"] - log_status[system][test]["dos"]["window_width"]/2
             emax = log_status[system][test]["energies"]["efermi"] + log_status[system][test]["dos"]["window_width"]/2
             log_status[system][test]["dos"]["emin"] = emin
@@ -106,7 +106,7 @@ def calculate_dos(log_status: dict, delta_e = 0.01, smear = 0.02) -> dict:
 
 def draw_dos(log_status: dict) -> None:
 
-    print("drawing density of states")
+    print("abg>> drawing density of states")
     plt_nrow = count_test_kinds(log_status)
     plt_ncol = len(log_status.keys())
     fig, axs = plt.subplots(plt_nrow, plt_ncol, figsize=(8, 15), squeeze=False)
@@ -163,7 +163,7 @@ def draw_dos(log_status: dict) -> None:
 
 def statistics(work_status: dict, test_status: dict, log_status: dict) -> None:
 
-    print("To do precision statistics, experimental values are needed for all systems.")
+    print("abg>> To do precision statistics, experimental values are needed for all systems.")
     ncol = 2
     fig, axs = plt.subplots(int(np.ceil(len(work_status["systems"].keys())/ncol)), ncol, figsize=(8, 8), squeeze=False)
     
@@ -187,7 +187,8 @@ def statistics(work_status: dict, test_status: dict, log_status: dict) -> None:
             band_gaps[-1].append(band_gap)
             
             title = log_status[system][test]["pseudopotential"]["pseudopot_kind"]
-            title += "_" + log_status[system][test]["pseudopotential"]["version"]
+            if log_status[system][test]["pseudopotential"]["version"] != "":
+                title += "_" + log_status[system][test]["pseudopotential"]["version"]
             if log_status[system][test]["pseudopotential"]["appendix"] != "":
                 title += log_status[system][test]["pseudopotential"]["appendix"]
             pseudopotentials.append(title)
@@ -274,10 +275,10 @@ def preprocess_2d(tests: dict):
                             exist_tests_1d_startswith[pseudopot_kind][version] = []
                         if appendix not in exist_tests_1d_startswith[pseudopot_kind][version]:
                             exist_tests_1d_startswith[pseudopot_kind][version].append(appendix)
-                        print("-"*50)
-                        print("Preprocess_2d\nFor pseudopot_kind = ", pseudopot_kind, ", \nversion = ", version, ", \nappendix = ", appendix, ", \nfind system = ", folder_name.split("_")[-1])
+                        print("abg>> " + "-"*50)
+                        print("abg>> Preprocess_2d\nFor pseudopot_kind = ", pseudopot_kind, ", \nversion = ", version, ", \nappendix = ", appendix, ", \nfind system = ", folder_name.split("_")[-1])
     if exist_tests_1d_startswith != {}:
-        print("-"*50)
+        print("abg>> " + "-"*50)
 
     # then combine all possible combinations
     tests_2d = {}
@@ -393,7 +394,9 @@ def postprocess_2d(exist_tests_1d_startswith: dict, tests_2d: dict, mapping_test
         data_system = np.zeros(shape = (num_diagonal, num_diagonal))
         availability = np.zeros(shape = (num_diagonal, num_diagonal))
         for test in log_status[system].keys():
-            pseudopot_kind_version_appendix = log_status[system][test]["pseudopotential"]["pseudopot_kind"]+"_"+log_status[system][test]["pseudopotential"]["version"]
+            pseudopot_kind_version_appendix = log_status[system][test]["pseudopotential"]["pseudopot_kind"]
+            if log_status[system][test]["pseudopotential"]["version"] != "":
+                pseudopot_kind_version_appendix += "_"+log_status[system][test]["pseudopotential"]["version"]
             if log_status[system][test]["pseudopotential"]["appendix"] != "":
                 pseudopot_kind_version_appendix += "_"+log_status[system][test]["pseudopotential"]["appendix"]
             test_i = mapping_tests_2d_to_1d[pseudopot_kind_version_appendix][0]

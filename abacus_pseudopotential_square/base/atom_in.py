@@ -1,3 +1,21 @@
+"""
+Atomic basic information
+
+Author: Kirk0830
+Date: 2023-11-22
+
+Description:
+    This file contains basic information of atoms.
+
+Information:
+    element number to element label
+    element label to element number
+    element label to element mass
+    sublayer to l
+    l to sublayer
+    
+"""
+
 def get_element_label(label: int) -> str:
 
     element = {

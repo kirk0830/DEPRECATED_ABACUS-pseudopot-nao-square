@@ -62,7 +62,9 @@ def scan_valid_pseudopotentials(work_status: dict):
         for pseudopot_kind in work_status["pseudopotentials"]["kinds"][element]:
             for version in work_status["pseudopotentials"]["versions"][element]:
                 for appendix in work_status["pseudopotentials"]["appendices"][element]:
-                    pseudopotential = pseudopot_kind + "_" + version
+                    pseudopotential = pseudopot_kind
+                    if version != "":
+                        pseudopotential += "_" + version
                     if appendix != "":
                         pseudopotential += "_" + appendix
                     # if find the folder named as pseudopot_kind + "_" + version + "_" + appendix, then it is valid

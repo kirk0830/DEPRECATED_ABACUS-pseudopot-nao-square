@@ -32,20 +32,20 @@ def calculate_band_gap(band_energies, nelec: int, efermi: float, metal = True):
     idx_level -= 1
 
     homo = sorted_[idx_level][0]
-    print("find homo with energy: {0} ev, its (k,b)-weight is: {1}".format(homo, sorted_[idx_level][1]))
+    print("foldband>> find homo with energy: {0} ev, its (k,b)-weight is: {1}".format(homo, sorted_[idx_level][1]))
     if(homo > efermi):
-        print("number of electrons before adding the last: ", _nelec - sorted_[idx_level][1])
-        print("number of electrons after adding the last: ", _nelec)
-        print("total number of electrons of system: ", nelec)
+        print("foldband>> number of electrons before adding the last: ", _nelec - sorted_[idx_level][1])
+        print("foldband>> number of electrons after adding the last: ", _nelec)
+        print("foldband>> total number of electrons of system: ", nelec)
         if (nelec > (_nelec - sorted_[idx_level][1])) and (nelec < _nelec):
-            Warning("It maybe a gapless system!")
+            Warning("foldband>> It maybe a gapless system!")
             homo = efermi
             lumo = efermi
             band_gap = 0
-            print("***WARNING*** you may meet a gapless system, set homo = lumo = {0} ev and band gap = 0 ev".format(efermi))
+            print("foldband>> ***WARNING*** you may meet a gapless system, set homo = lumo = {0} ev and band gap = 0 ev".format(efermi))
             return 0, sorted_, efermi, efermi
         else:
-            raise ValueError("homo energy is larger than efermi")
+            raise ValueError("foldband>> homo energy is larger than efermi")
     
     lumo = sorted_[idx_level+1][0]
     band_gap = lumo - homo
@@ -54,7 +54,7 @@ def calculate_band_gap(band_energies, nelec: int, efermi: float, metal = True):
     #    idx_level += 1
     #    lumo = sorted_[idx_level][0]
     #    band_gap = lumo - homo
-    print("find lumo with energy: {0} ev, its (k,b)-weight is: {1}".format(lumo, sorted_[idx_level][1]))
+    print("foldband>> find lumo with energy: {0} ev, its (k,b)-weight is: {1}".format(lumo, sorted_[idx_level][1]))
     return band_gap, sorted_, homo, lumo
 
 def scan_degeneracies(band_energies):
@@ -220,18 +220,18 @@ def plot_dos(dos: np.ndarray, homo: float, lumo: float, efermi: float, emin: flo
 if __name__ == "__main__":
     system = "t_pd_03_inas/scf.log"
     band_energies, nelec, nband, efermi = parse_qe_output(system)
-    print("SYSTEM: ", system)
-    print("nelec = ", nelec, " nband = ", nband, " efermi = ", efermi)
+    print("foldband>> SYSTEM: ", system)
+    print("foldband>> nelec = ", nelec, " nband = ", nband, " efermi = ", efermi)
     window_width = 5
     emin = efermi - window_width/2
     emax = emin + window_width
     band_gap, band_energies, homo, lumo = calculate_band_gap(band_energies, nelec, efermi, True)
-    print("band gap = ", round(band_gap, 4), " ev")
+    print("foldband>> band gap = ", round(band_gap, 4), " ev")
     dos = calculate_dos(band_energies, emin, emax, 0.01, 0.02)
     _, _, end_indices, degen_data = scan_degeneracies(band_energies)
-    print("undegenerated band energies with (k,b)-weights:")
+    print("foldband>> undegenerated band energies with (k,b)-weights:")
     print(band_energies)
-    print("degenerated band energies, degeneracies and end indices:")
+    print("foldband>> degenerated band energies, degeneracies and end indices:")
     print(degen_data)
 
     plot_dos(dos, homo, lumo, efermi, emin, emax, system)

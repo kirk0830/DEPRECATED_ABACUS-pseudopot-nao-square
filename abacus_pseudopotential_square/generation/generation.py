@@ -213,7 +213,7 @@ def generate_test_status(work_status: dict) -> dict:
                         test_name += "ecut" + str(ecutwfc)
                     else:
                         test_name = test_name[:-1] # remove the last _
-                    print("prepare test: " + test_name)
+                    print("prepare test: " + test_name + " for system: " + system)
                     # initialize test_status for this test
                     test_status["systems"][system][test_name] = {
                         "elements": elements,
@@ -235,7 +235,7 @@ def generate_test_status(work_status: dict) -> dict:
 
             elif work_status["calculation"]["basis_type"] == "lcao":
                 test_name = test_name[:-1] # remove the last _
-                print("prepare test: " + test_name)
+                print("prepare test: " + test_name + " for system: " + system)
                 # initialize test_status for this test
                 test_status["systems"][system][test_name] = {
                     "elements": elements,

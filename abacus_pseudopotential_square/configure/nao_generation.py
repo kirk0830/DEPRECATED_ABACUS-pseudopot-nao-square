@@ -2,6 +2,15 @@ import os
 import json
 
 def get_valance_electronic_configuration(pspot_file: str) -> dict:
+    """_summary_
+
+    Args:
+        pspot_file (str): filename of pseudopotential
+
+    Returns:
+        dict: _description_
+    """
+
     clean_line = "start"
     with open(pspot_file, "r") as f:
         while clean_line != "</PP_INPUTFILE>":
