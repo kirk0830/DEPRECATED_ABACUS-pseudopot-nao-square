@@ -1,0 +1,60 @@
+{
+    "work_folder": ".",
+    "global": {
+        "test_mode": "pseudopotential",
+        "analysis_items": [],
+        "software": "Quantum ESPRESSO",
+        "save_test_status": false
+    },
+    "calculation": {
+        "basis_type": "pw",
+        "functionals": [
+            "PBE"
+        ],
+        "ecutwfc": [
+            100
+        ],
+        "stress_deformation_ratios": []
+    },
+    "systems": {
+        "La": {
+            "experimental_values": {}
+        }
+    },
+    "pseudopotentials": {
+        "pseudopot_paths": {
+            "work": "./pseudopotentials",
+            "resources": "./pseudopotentials/resources"
+        },
+        "kinds": {
+            "La": [
+                "atompaw.wentzcovitch"
+            ]
+        },
+        "versions": {
+            "La": [
+                ""
+            ]
+        },
+        "appendices": {
+            "La": [
+                ""
+            ]
+        }
+    },
+    "numerical_orbitals": {
+        "nao_paths": {
+            "work": "./numerical_orbitals",
+            "resources": "./numerical_orbitals/resources"
+        },
+        "types": {
+            "La": []
+        },
+        "rcuts": {
+            "La": []
+        },
+        "appendices": {
+            "La": []
+        }
+    }
+}

@@ -357,8 +357,8 @@ if __name__ == "__main__":
     # 0. matrials project api key
     api_key = "wV1HUdmgESPVgSmQj5cc8WvttCO8NTHp"
     # 1. define systems
-    systems = ['Ce', 'Dy', 'Er', 'Eu', 'Gd', 'Ho', 'Lu', 'Nd', 'Pm', 'Pr', 'Sm', 'Tb', 'Tm', 'Yb']
-    #systems = ['La'] # does not have pd_04_core, pd_04_icmod
+    #systems = ['Ce', 'Dy', 'Er', 'Eu', 'Gd', 'Ho', 'Lu', 'Nd', 'Pm', 'Pr', 'Sm', 'Tb', 'Tm', 'Yb']
+    systems = ['La'] # does not have pd_04_core, pd_04_icmod
     # 2. prepare template input
     prepare_template_input(api_key, systems, softare = "Quantum ESPRESSO", move = True)
     # 3. generate input json skeleton
@@ -368,8 +368,6 @@ if __name__ == "__main__":
     # 4. adjust template input according to input json
     pseudopotentials = [
         "pd_04",
-        "pd_04_core",
-        "pd_04_icmod",
         "paw_10",
         "gthpp1",
         "atompaw.wentzcovitch"

@@ -17,7 +17,6 @@ basic_parameters = {
     "control": {
         "calculation": "scf",
         "restart_mode": "from_scratch",
-        "prefix": "abacus",
         "pseudo_dir": "./",
         "outdir": "./",
         "tprnfor": ".true.",
