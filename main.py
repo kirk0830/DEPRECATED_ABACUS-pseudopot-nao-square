@@ -11,7 +11,7 @@ def switch_to_program_folder() -> None:
     switch to program folder
     """
     os.chdir(".\\abacus_pseudopotential_square\\")
-    print("Switch to program folder: %s"%os.path.abspath(".\\abacus_pseudopotential_square\\"))
+    print("main>> Switch to program folder: %s"%os.path.abspath(".\\abacus_pseudopotential_square\\"))
     return None
 """
 Sub-driver for test generation
@@ -71,5 +71,5 @@ def main(mode: str, file: str):
 
 if __name__ == "__main__":
 
-    main("generation", "input_NbOCl.json")
+    main("generation", "input.json")
 

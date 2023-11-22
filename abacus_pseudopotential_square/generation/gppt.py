@@ -31,8 +31,9 @@ def gppt_quantum_espresso(test_status: dict):
                 # copy pseudopotential to test folder
                 for element in test_status["systems"][system][test]["elements"]:
                     pseudopot_path = test_status["paths"]["pseudopotential"]["resources"] + "\\"
-                    pseudopot_path += test_status["systems"][system][test]["pseudopotentials"]["info"][element]["kind"] + "_"
-                    pseudopot_path += test_status["systems"][system][test]["pseudopotentials"]["info"][element]["version"]
+                    pseudopot_path += test_status["systems"][system][test]["pseudopotentials"]["info"][element]["kind"]
+                    if test_status["systems"][system][test]["pseudopotentials"]["info"][element]["version"] != "":
+                        pseudopot_path += "_" + test_status["systems"][system][test]["pseudopotentials"]["info"][element]["version"]
                     if test_status["systems"][system][test]["pseudopotentials"]["info"][element]["appendix"] != "":
                         pseudopot_path += "_" + test_status["systems"][system][test]["pseudopotentials"]["info"][element]["appendix"]
                     pseudopot_path += "\\"
@@ -81,8 +82,9 @@ def gppt_abacus(test_status: dict):
                 # copy pseudopotential to test folder
                 for element in test_status["systems"][system][test]["elements"]:
                     pseudopot_path = test_status["paths"]["pseudopotential"]["resources"] + "\\"
-                    pseudopot_path += test_status["systems"][system][test]["pseudopotentials"]["info"][element]["kind"] + "_"
-                    pseudopot_path += test_status["systems"][system][test]["pseudopotentials"]["info"][element]["version"]
+                    pseudopot_path += test_status["systems"][system][test]["pseudopotentials"]["info"][element]["kind"]
+                    if test_status["systems"][system][test]["pseudopotentials"]["info"][element]["version"] != "":
+                        pseudopot_path += "_" + test_status["systems"][system][test]["pseudopotentials"]["info"][element]["version"]
                     if test_status["systems"][system][test]["pseudopotentials"]["info"][element]["appendix"] != "":
                         pseudopot_path += "_" + test_status["systems"][system][test]["pseudopotentials"]["info"][element]["appendix"]
                     pseudopot_path += "\\"

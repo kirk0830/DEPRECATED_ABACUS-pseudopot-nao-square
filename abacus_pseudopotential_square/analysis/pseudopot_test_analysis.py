@@ -122,7 +122,8 @@ def draw_dos(log_status: dict) -> None:
 
             title = "System: " + system 
             title += ", Pseudopotential: " + log_status[system][test]["pseudopotential"]["pseudopot_kind"]
-            title += ", Version: " + log_status[system][test]["pseudopotential"]["version"]
+            if log_status[system][test]["pseudopotential"]["version"] != "":
+                title += ", Version: " + log_status[system][test]["pseudopotential"]["version"]
             if log_status[system][test]["pseudopotential"]["appendix"] != "":
                 title += log_status[system][test]["pseudopotential"]["appendix"]
             
@@ -182,9 +183,10 @@ def statistics(test_status: dict, log_status: dict) -> None:
             band_gaps[-1].append(band_gap)
             
             title = log_status[system][test]["pseudopotential"]["pseudopot_kind"]
-            title += "_" + log_status[system][test]["pseudopotential"]["version"]
+            if log_status[system][test]["pseudopotential"]["version"] != "":
+                title += "_" + log_status[system][test]["pseudopotential"]["version"]
             if log_status[system][test]["pseudopotential"]["appendix"] != "":
-                title += log_status[system][test]["pseudopotential"]["appendix"]
+                title += "_" + log_status[system][test]["pseudopotential"]["appendix"]
             pseudopotentials.append(title)
 
             if add_reference_line:
@@ -402,7 +404,9 @@ def postprocess_2d(exist_tests_1d_startswith: dict, tests_2d: dict, mapping_test
         data_system = np.zeros(shape = (num_diagonal, num_diagonal))
         availability = np.zeros(shape = (num_diagonal, num_diagonal))
         for test in log_status[system].keys():
-            pseudopot_kind_version_appendix = log_status[system][test]["pseudopotential"]["pseudopot_kind"]+"_"+log_status[system][test]["pseudopotential"]["version"]
+            pseudopot_kind_version_appendix = log_status[system][test]["pseudopotential"]["pseudopot_kind"]
+            if log_status[system][test]["pseudopotential"]["version"] != "":
+                pseudopot_kind_version_appendix += "_"+log_status[system][test]["pseudopotential"]["version"]
             if log_status[system][test]["pseudopotential"]["appendix"] != "":
                 pseudopot_kind_version_appendix += "_"+log_status[system][test]["pseudopotential"]["appendix"]
             test_i = mapping_tests_2d_to_1d[pseudopot_kind_version_appendix][0]

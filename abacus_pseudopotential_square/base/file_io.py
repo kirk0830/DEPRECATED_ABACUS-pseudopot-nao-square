@@ -1,6 +1,20 @@
+"""
+Interface to external files
+
+Author: Kirk0830
+Date: 2023-11-22
+
+Description:
+    This file contains functions that can read and write files.
+
+Functions:
+    check_folder_availability(folder: str) -> None
+    parse_cif(cif_file: str, save_json = False) -> tuple[dict, dict]
+"""
 import abacus_pseudopotential_square.base.atom_in as ai
 import numpy as np
 import os
+import json
 
 def check_folder_availability(folder: str) -> None:
     """
@@ -12,7 +26,7 @@ def check_folder_availability(folder: str) -> None:
         print("Folder check: %s, not found, exit."%folder)
         exit(1)
 
-def parse_cif(cif_file: str) -> tuple[dict, dict]:
+def parse_cif(cif_file: str, save_json = False) -> tuple[dict, dict]:
     cif = {
         "lattice_parameters": {
             "a": 0,
@@ -88,6 +102,38 @@ def parse_cif(cif_file: str) -> tuple[dict, dict]:
         vector_b,
         vector_c,
     ]
+    lattice["lattice_parameters"] = cif["lattice_parameters"]
+
+    if save_json:
+        cif_json = cif_file.split(".")[0] + "_origin.json"
+        with open(cif_json, 'w') as f:
+            json.dump(cif, f, indent = 4)
+        print("CIF file original information %s has been converted to JSON file %s."%(cif_file, cif_json))
+        lattice_json = cif_file.split(".")[0] + "_lattice.json"
+        lattice["lattice_vectors"] = [
+            vector_a.tolist(),
+            vector_b.tolist(),
+            vector_c.tolist(),
+        ]
+        with open(lattice_json, 'w') as f:
+            json.dump(lattice, f, indent = 4)
+        print("Lattice information has been saved to JSON file %s."%lattice_json)
+        atomic_positions_json = cif_file.split(".")[0] + "_atoms.json"
+        for atom in atomic_positions.keys():
+            atomic_positions[atom]["positions"] = np.array(atomic_positions[atom]["positions"]).tolist()
+        with open(atomic_positions_json, 'w') as f:
+            json.dump(atomic_positions, f, indent = 4)
+        print("Atomic positions information has been saved to JSON file %s."%atomic_positions_json)
+        total_json = cif_file.split(".")[0] + "_total.json"
+        total = {
+            "cif": cif,
+            "lattice": lattice,
+            "atomic_positions": atomic_positions,
+        }
+        with open(total_json, 'w') as f:
+            json.dump(total, f, indent = 4)
+        print("Total information has been saved to JSON file %s."%total_json)
+        
     return atomic_positions, lattice
 
 
