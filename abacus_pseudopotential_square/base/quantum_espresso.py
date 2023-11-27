@@ -172,14 +172,27 @@ def write_atomic_species(atomic_species: dict) -> str:
     atomic_species_str += "\n"
     return atomic_species_str
 
-def write_cell_parameters(lattice: dict) -> str:
+def write_cell_parameters(lattice: dict, mode = "cif") -> str:
     """
     write cell parameters
+
+    mode: "cif" or "nao"
     """
     cell_parameters_str = "CELL_PARAMETERS (angstrom)\n"
-    for i in range(3):
-        cell_parameters_str += "%12.8f %12.8f %12.8f\n"%(lattice["lattice_vectors"][i][0], lattice["lattice_vectors"][i][1], lattice["lattice_vectors"][i][2])
-    cell_parameters_str += "\n"
+    if mode == "cif":
+        for i in range(3):
+            cell_parameters_str += "%12.8f %12.8f %12.8f\n"%(lattice["lattice_vectors"][i][0], lattice["lattice_vectors"][i][1], lattice["lattice_vectors"][i][2])
+        cell_parameters_str += "\n"
+    elif mode == "nao":
+        lattice_constant = 1.889725989
+        default_lattice = [
+            [20.0, 0.0, 0.0],
+            [0.0, 20.0, 0.0],
+            [0.0, 0.0, 20.0],
+        ]
+        for i in range(3):
+            cell_parameters_str += "%12.8f %12.8f %12.8f\n"%(default_lattice[i][0] * lattice_constant, default_lattice[i][1] * lattice_constant, default_lattice[i][2] * lattice_constant)
+            
     return cell_parameters_str
 
 def write_atomic_positions(atoms: dict) -> str:
@@ -194,19 +207,24 @@ def write_atomic_positions(atoms: dict) -> str:
     atomic_positions_str += "\n"
     return atomic_positions_str
 
-def write_k_points(other_parameters = {}, lattice = {}, metal = True) -> str:
+def write_k_points(other_parameters = {}, lattice = {}, system_type = "metal") -> str:
     """
     write k points
     """
-    lattice_length_band_folding_maximum = 31.0 # angstrom, means nk*lattice should be no less than 25 angstrom
-    llbfm = lattice_length_band_folding_maximum
-    if not metal:
-        llbfm = 20.0
-    nkpts = [
-        int(llbfm / lattice["lattice_parameters"]["a"]),
-        int(llbfm / lattice["lattice_parameters"]["b"]),
-        int(llbfm / lattice["lattice_parameters"]["c"])
-    ]
+    k_points_str = "K_POINTS automatic\n"
+
+    if system_type != "isolated":
+        
+        lattice_length_band_folding_maximum = 31.0 # angstrom, means nk*lattice should be no less than 25 angstrom
+        llbfm = lattice_length_band_folding_maximum
+        if system_type != "metal":
+            llbfm = 20.0
+        nkpts = [
+            int(llbfm / lattice["lattice_parameters"]["a"]),
+            int(llbfm / lattice["lattice_parameters"]["b"]),
+            int(llbfm / lattice["lattice_parameters"]["c"])
+        ]
+    
     k_points = basic_parameters["k_points"]
 
     k_points["k_points"][0] = nkpts[0]
@@ -217,7 +235,6 @@ def write_k_points(other_parameters = {}, lattice = {}, metal = True) -> str:
         for key, value in other_parameters["k_points"].items():
             k_points[key] = value
 
-    k_points_str = "K_POINTS automatic\n"
     k_points_str += "%d %d %d %d %d %d\n"%(
         k_points["k_points"][0], 
         k_points["k_points"][1], 
@@ -256,6 +273,84 @@ def cif_to_quantum_espresso(
     return_str += write_atomic_positions(atoms)
     return_str += write_k_points(other_parameters, lattice)
     with open(qe_filename, 'w') as f:
+        f.write(return_str)
+
+def write_dimer_structure(symbol = "H", distance = 3.0) -> str:
+    """
+    write atomic positions, specifically for dimer
+    """
+    atomic_positions_str = "ATOMIC_POSITIONS (angstrom)\n"
+    atomic_positions_str += "%s %12.8f %12.8f %12.8f"%(symbol, 0.0, 0.0, 0.0) + " 1 1 1\n"
+    atomic_positions_str += "%s %12.8f %12.8f %12.8f"%(symbol, 0.0, 0.0, distance) + " 0 0 1\n"
+    atomic_positions_str += "\n"
+    return atomic_positions_str
+
+def write_trimer_structure(symbol = "H", distance = 3.0) -> str:
+    """
+    write atomic positions, specifically for trimer, with one vertical angle
+    """
+    atomic_positions_str = "ATOMIC_POSITIONS (angstrom)\n"
+    atomic_positions_str += "%s %12.8f %12.8f %12.8f"%(symbol, 0.0, 0.0, 0.0) + " 1 1 1\n"
+    atomic_positions_str += "%s %12.8f %12.8f %12.8f"%(symbol, 0.0, 0.0, distance) + " 0 0 1\n"
+    atomic_positions_str += "%s %12.8f %12.8f %12.8f"%(symbol, 0.0, distance, 0.0) + " 0 1 0\n"
+    atomic_positions_str += "\n"
+    return atomic_positions_str
+
+def reference_structure_from_quantum_espresso(reference_structure = "dimer", symbol = "H", distance = 3.0) -> None:
+    """quantum espresso input file generation for finding the bond length of reference structure
+
+    Args:
+        reference_structure (str, optional): reference structure type, dimer or trimer supported. Defaults to "dimer".
+        symbol (str, optional): element symbol. Defaults to "H".
+        distance (float, optional): characteristic distence between atoms. Defaults to 3.0 Angstrom.
+
+    Raises:
+        ValueError: reference_structure not properly set
+
+    Returns:
+        None
+
+    Additional information:
+        This function will be involved in the process of generating numerical orbitals. More specifically:
+        element-wise pseudopotential tests:
+            1. on quantum_espresso the pseudopotential validity test: preparation -> test -> analysis
+            2. on PTG_dpsi-ABACUS the numerical orbitals generation: preparation -> generation
+            3. on ABACUS the numerical orbitals accuracy test: preparation -> test -> analysis
+    
+    Generated files:
+        filename: [symbol]_[reference_structure].in, e.g. H_dimer.in
+        CONTROL, SYSTEM, ELECTRONS, IONS, CELL, ATOMIC_SPECIES sections are identical with cif_to_quantum_espresso
+        ATOMIC_POSITIONS, CELL_PARAMETERS, K_POINTS sections are different.
+        ATOMIC_POSITIONS: only two or three atoms are involved
+        CELL_PARAMETERS: 20 Bohr for each lattice vector
+        K_POINTS: 1 1 1 0 0 0 due to isolated systems calculation
+    """
+    if reference_structure == "dimer":
+        atomic_positions_str = write_dimer_structure(symbol, distance)
+    elif reference_structure == "trimer":
+        atomic_positions_str = write_trimer_structure(symbol, distance)
+    else:
+        raise ValueError("reference_structure should be 'dimer' or 'trimer'")
+
+    return_str = ""
+    return_str += write_control({
+        "control": {
+            "calculation": "relax",
+        }
+    })
+    return_str += write_system({}, {})
+    return_str += write_electrons({})
+    return_str += write_ions({})
+    return_str += write_cell({})
+    return_str += write_atomic_species({
+        "elements": [symbol],
+        "mass": [ai.get_element_mass(symbol)],
+        "pseudopotentials": [symbol + "_pseudopot"],
+    })
+    return_str += write_cell_parameters({}, "nao")
+    return_str += atomic_positions_str
+    return_str += write_k_points({}, {}, "isolated")
+    with open(symbol + "_" + reference_structure + ".in", 'w') as f:
         f.write(return_str)
 
 if __name__ == "__main__":

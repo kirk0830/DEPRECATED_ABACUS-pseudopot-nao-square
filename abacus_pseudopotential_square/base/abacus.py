@@ -97,12 +97,14 @@ def STRU_to_cif(stru: dict):
 
 def write_atomic_species(atomic_species: dict) -> str:
     
-    print(atomic_species)
-    return_str = "ATOMIC_SPECIES\n"
+    """
+    write atomic species
+    """
+    atomic_species_str = "ATOMIC_SPECIES\n"
     for iatom in range(len(atomic_species["elements"])):
-        return_str += atomic_species["elements"][iatom] + " " + str(atomic_species["mass"][iatom]) + " " + atomic_species["pseudopotentials"][iatom] + "\n"
-    return_str += "\n"
-    return return_str
+        atomic_species_str += atomic_species["elements"][iatom] + " " + str(atomic_species["mass"][iatom]) + " " + atomic_species["pseudopotentials"][iatom] + "\n"
+    atomic_species_str += "\n"
+    return atomic_species_str
 
 def write_numerical_orbital(numerical_orbital: dict) -> str:
     
@@ -130,7 +132,72 @@ def write_atomic_positions(atoms: dict) -> str:
             return_str += str(atoms[element]["mag"]) + "\n"
         else:
             return_str += "0.0\n"
+        return_str += str(len(atoms[element]["positions"])) + "\n"
         for position in atoms[element]["positions"]:
             return_str += "%20.10f %20.10f %20.10f 1 1 1\n"%(position[0], position[1], position[2])
     return_str += "\n"
     return return_str
+
+def write_dimer_structure(symbol = "H", distance = 3.0) -> str:
+    
+    return_str = "ATOMIC_SPECIES\nCartesian\n"
+    return_str += symbol + "\n0.0\n2\n"
+    return_str += symbol + " 0.0 0.0 0.0 0 0 0\n"
+    return_str += symbol + " 0.0 0.0 " + str(distance) + " 0 0 1\n"
+    return_str += "\n"
+    return return_str
+
+def write_trimer_structure(symbol = "H", distance = 3.0) -> str:
+    
+    return_str = "ATOMIC_SPECIES\nCartesian\n"
+    return_str += symbol + "\n0.0\n3\n"
+    return_str += symbol + " 0.0 0.0 0.0 0 0 0\n"
+    return_str += symbol + " 0.0 0.0 " + str(distance) + " 0 0 1\n"
+    return_str += symbol + " 0.0 " + str(distance) + " 0.0 0 1 0\n"
+    return_str += "\n"
+    return return_str
+
+def reference_structure_from_abacus(reference_structure = "dimer", symbol = "H", distance = 3.0) -> None:
+    """ABACUS input file generation for finding the bond length of reference structure
+
+    Args:
+        reference_structure (str, optional): reference structure type, dimer or trimer supported. Defaults to "dimer".
+        symbol (str, optional): element symbol. Defaults to "H".
+        distance (float, optional): characteristic distence between atoms. Defaults to 3.0 Angstrom.
+
+    Raises:
+        ValueError: reference_structure not properly set
+
+    Returns:
+        None: write ABACUS input file to STRU_H_dimer or STRU_H_trimer
+
+    
+    """
+    
+    if reference_structure == "dimer":
+        atomic_positions_str = write_dimer_structure(symbol, distance)
+    elif reference_structure == "trimer":
+        atomic_positions_str = write_trimer_structure(symbol, distance)
+    else:
+        raise ValueError("reference_structure should be 'dimer' or 'trimer'")
+    
+    return_str = write_atomic_species({
+        "elements": [symbol],
+        "mass": [ai.get_element_mass(symbol)],
+        "pseudopotentials": [symbol + "_pseudopot"],
+    })
+    return_str += write_numerical_orbital({
+        "elements": [symbol],
+        "numerical_orbitals": [symbol + "_numerical_orbital"],
+    })
+    return_str += write_lattice({
+        "lattice_constant": 1.889716,
+        "lattice_vectors": [
+            [20.0, 0.0, 0.0],
+            [0.0, 20.0, 0.0],
+            [0.0, 0.0, 20.0],
+        ],
+    })
+    return_str += atomic_positions_str
+    with open("STRU_" + symbol + "_" + reference_structure, 'w') as f:
+        f.write(return_str)
